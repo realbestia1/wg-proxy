@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv bash
+
+if [[ -f /config/wg_confs/wg0.conf ]]; then
+    exit 0
+fi
+
+if [[ -n "${WG_INTERFACE_PRIVATE_KEY}" ]]; then
+    mkdir -p /config/wg_confs
+    {
+        echo "[Interface]"
+        echo "PrivateKey = ${WG_INTERFACE_PRIVATE_KEY}"
+        [[ -n "${WG_INTERFACE_ADDRESS}" ]] && echo "Address = ${WG_INTERFACE_ADDRESS}"
+        [[ -n "${WG_INTERFACE_DNS}" ]] && echo "DNS = ${WG_INTERFACE_DNS}"
+        echo ""
+        echo "[Peer]"
+        echo "PublicKey = ${WG_PEER_PUBLIC_KEY}"
+        echo "AllowedIPs = ${WG_PEER_ALLOWED_IPS}"
+        echo "Endpoint = ${WG_PEER_ENDPOINT}"
+        echo "PersistentKeepalive = ${WG_PEER_PERSISTENT_KEEPALIVE}"
+    } > /config/wg_confs/wg0.conf
+    chmod 600 /config/wg_confs/wg0.conf
+fi

@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+PROXY_PORT="${HTTP_PORT:-3081}"
+AUTH="${REQUIRE_AUTH:-true}"
+PROXY_U="${PROXY_USER}"
+PROXY_P="${PROXY_PASSWORD}"
+
+echo "[http-proxy] Starting gost HTTP proxy on port ${PROXY_PORT}"
+
+if [[ "${AUTH}" == "true" ]] && [[ -n "${PROXY_U}" ]] && [[ -n "${PROXY_P}" ]]; then
+    echo "[http-proxy] Auth enabled for user: ${PROXY_U}"
+    exec /usr/local/bin/gost -L="http://${PROXY_U}:${PROXY_P}@:${PROXY_PORT}"
+else
+    echo "[http-proxy] Auth disabled, open access"
+    exec /usr/local/bin/gost -L="http://:${PROXY_PORT}"
+fi

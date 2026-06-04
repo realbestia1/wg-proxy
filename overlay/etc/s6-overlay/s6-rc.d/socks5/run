@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+PROXY_PORT="${SOCKS5_PORT:-3080}"
+AUTH="${REQUIRE_AUTH:-true}"
+PROXY_U="${PROXY_USER}"
+PROXY_P="${PROXY_PASSWORD}"
+
+echo "[socks5] Starting gost SOCKS5 proxy on port ${PROXY_PORT}"
+
+if [[ "${AUTH}" == "true" ]] && [[ -n "${PROXY_U}" ]] && [[ -n "${PROXY_P}" ]]; then
+    echo "[socks5] Auth enabled for user: ${PROXY_U}"
+    exec /usr/local/bin/gost -L="socks5://${PROXY_U}:${PROXY_P}@:${PROXY_PORT}"
+else
+    echo "[socks5] Auth disabled, open access"
+    exec /usr/local/bin/gost -L="socks5://:${PROXY_PORT}"
+fi
