@@ -1,6 +1,6 @@
 # wg-proxy
 
-Singolo container Docker con WireGuard + proxy SOCKS5 + proxy HTTP (Squid).
+Singolo container Docker con WireGuard + proxy SOCKS5 + proxy HTTP.
 
 Tutto il traffico passa attraverso il tunnel WireGuard.
 
